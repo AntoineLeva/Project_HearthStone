@@ -5,9 +5,5 @@ public class MonstresClassique extends Monstres {
         super(id, nom, pointsDeVie, forceAttaque);
     }
 
-    @Override
-    public void jouerTour() {
-        // Logique pour le tour de jeu du monstre classique
-        System.out.println("Monstre classique " + getNom() + " attaque !");
-    }
+
 }

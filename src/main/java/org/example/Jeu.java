@@ -1,5 +1,6 @@
 package org.example;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Jeu
@@ -7,8 +8,14 @@ public class Jeu
     int choixJ1;
     int choixJ2;
 
-    boolean fintourJ1 = false;
-    boolean fintourJ2 = false;
+    Deck deckPretre = new Deck();
+    Deck deckMage = new Deck();
+
+
+
+
+    boolean finTourJ1 = false;
+    boolean finTourJ2 = false;
 
     private Scanner scanner = new Scanner(System.in);
     public Jeu()
@@ -16,6 +23,7 @@ public class Jeu
 
     }
 
+    //Choix du champion
     public Champion choixChampion(String joueur) {
         System.out.println(joueur + "choisissez un Champion : 1. Pretre    2. Mage");
 
@@ -27,10 +35,10 @@ public class Jeu
 
         switch (choix) {
             case 1:
-                Champion Dieu = new Pretre(1, champJ1, 100, 3);
+                Champion Dieu = new Pretre(1, champJ1, 100, 3, deckPretre.getDeck1());
                 return Dieu;
             case 2:
-                Champion Sorcier = new Mage(2, champJ1, 100,3);
+                Champion Sorcier = new Mage(2, champJ1, 100,3, deckMage.getDeck2());
                 return Sorcier;
             default:
                 System.out.println("Choix invalide. Veuillez réessayer.");
@@ -41,10 +49,12 @@ public class Jeu
 
 
 
+    //Boucle principale de jeu, tout le jeu est dans cette fonction
     public void boucleJeu(Champion champA, Champion champB)
     {
         // Scanner pour lire l'entrée utilisateur
         Scanner scanner = new Scanner(System.in);
+
 
         // Boucle de jeu
         while (true) {
@@ -54,10 +64,10 @@ public class Jeu
             do
             {
                 tourJoueur1(champA,champB);
-            }while(champA.mana > 0 && champB.PV > 0 && !fintourJ1 );
-            champA.mana = champA.mana +1;
+            }while(champA.mana > 0 && champB.PV > 0 && !finTourJ1 );
+                gestionMana(champA);
 
-//--------------------------verif fin de partie
+//--------------------------verif fin de partie à chaque tour si les PV du d'un des champions sont égale ou inféreur à 0
 
             if (champA.PV <= 0 || champB.PV <= 0 )
             {
@@ -76,11 +86,11 @@ public class Jeu
             do
             {
                 tourJoueur2(champA,champB);
-            }while(champB.mana > 0 && champA.PV > 0 && !fintourJ2);
-            champB.mana = champB.mana +1;
+            }while(champB.mana > 0 && champA.PV > 0 && !finTourJ2);
+                gestionMana(champB);
 
 
-//--------------------------verif fin de partie
+//--------------------------verif fin de partie à chaque tour si les PV du d'un des champions sont égale ou inféreur à 0
 
             if (champA.PV <= 0 || champB.PV <= 0 )
             {
@@ -91,10 +101,6 @@ public class Jeu
                 break;
             }
 
-
-
-
-
         }
     }
 
@@ -102,13 +108,13 @@ public class Jeu
 
     public void tourJoueur1(Champion champA, Champion champB)
     {
-        fintourJ1 = false;
+        finTourJ1 = false; //variable a remettre en false pour que le le tour ce lance
         afficherMenuJ1(champA, champB);
         choixJ1 = scanner.nextInt();
 
         switch (choixJ1) {
             case 1:
-                champA.poserCarte(new Carte());
+                champA.poserCarte(champA.cartes);
                 break;
             case 2:
                 champA.attaquer(champB);
@@ -118,26 +124,26 @@ public class Jeu
                 break;
             case 4:
                 System.out.println("Fin du tour.");
-                fintourJ1 = true;
-                champA.mana = champA.mana +1; //car c'est pas vrmt une action
+                finTourJ1 = true; //pour écourter le tour
+                champA.mana = champA.mana +1; // chaque action consomme 1 de mana, donc +1 car c'est pas vraiment une action
                 break;
             default:
                 System.out.println("Choix invalide. Veuillez réessayer.");
         }
 
-        champA.mana = champA.mana -1;
+        champA.mana = champA.mana -1; //on enleve 1 de mana pour chaque action
     }
 
     public void tourJoueur2(Champion champA, Champion champB)
     {
-        fintourJ2 = false;
+        finTourJ2 = false; //variable a remettre en false pour que le le tour ce lance
         afficherMenuJ2(champB, champA);
         choixJ2 = scanner.nextInt();
 
         switch (choixJ2)
         {
             case 1:
-                champB.poserCarte(new Carte());
+                champB.poserCarte(champB.cartes);
                 break;
             case 2:
                 champB.attaquer(champA);
@@ -147,13 +153,13 @@ public class Jeu
                 break;
             case 4:
                 System.out.println("Fin du tour.");
-                fintourJ2 = true;
-                champB.mana = champB.mana +1; //car c'est pas vrmt une action
+                finTourJ2 = true; //pour écourter le tour
+                champB.mana = champB.mana +1; // chaque action consomme 1 de mana, donc +1 car c'est pas vraiment une action
                 break;
             default:
                 System.out.println("Choix invalide. Veuillez réessayer.");
         }
-        champB.mana = champB.mana -1;
+        champB.mana = champB.mana -1; //on enleve 1 de mana pour chaque action
     }
 
 
@@ -163,12 +169,13 @@ public class Jeu
     // Méthode pour afficher le menu
     public void afficherMenuJ1(Champion champA, Champion champB)
     {
-        System.out.println("Tour Joueur 1:");
+
+        System.out.println("\n Tour Joueur 1:");
         System.out.println("1. Poser une carte    3. Utiliser la capacité spéciale                           ");
         System.out.println("2. Attaquer           4. Fin du tour");
         System.out.println("Etat Champion : ");
 
-        System.out.println(champA);
+        System.out.println(champA); //etat des champions
         System.out.println(champB);
 
         System.out.print("Choisissez une action : ");
@@ -177,14 +184,28 @@ public class Jeu
     // Méthode pour afficher le menu
     public void afficherMenuJ2(Champion champA, Champion champB)
     {
-        System.out.println("Tour Joueur 2:");
+        System.out.println("\n Tour Joueur 2:");
         System.out.println("1. Poser une carte    3. Utiliser la capacité spéciale                           ");
         System.out.println("2. Attaquer           4. Fin du tour");
         System.out.println("Etat Champion : ");
 
-        System.out.println(champA);
+        System.out.println(champA); //etats des champions
         System.out.println(champB);
 
         System.out.print("Choisissez une action : ");
     }
+
+
+    public void gestionMana(Champion champ) //permet de reset le mana si <3 retourne à 3 à chaque nouveau tour
+    {
+        if(champ.mana == 1)
+            champ.mana = champ.mana +1;
+        if(champ.mana == 0)
+            champ.mana = champ.mana +2;
+        champ.mana = champ.mana +1;
+    }
+
+
+
+
 }

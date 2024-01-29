@@ -46,7 +46,15 @@ public abstract class Monstres {
         this.forceAttaque = forceAttaque;
     }
 
-    // Méthode abstraite pour jouer le tour de jeu du monstre
-    public abstract void jouerTour();
+
+
+    @Override
+    public String toString() {
+        return "Monstres{" +
+                "nom='" + nom + '\'' +
+                ", PV=" + PV +
+                ", forceAttaque=" + forceAttaque +
+                '}';
+    }
 }
 

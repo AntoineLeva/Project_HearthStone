@@ -5,9 +5,5 @@ public class MonstresMascotte extends Monstres {
         super(id, nom, pointsDeVie, forceAttaque);
     }
 
-    @Override
-    public void jouerTour() {
-        // Logique pour le tour de jeu de la mascotte
-        System.out.println("Mascotte " + getNom() + " booste une cible alliée ou ennemie !");
-    }
+
 }
