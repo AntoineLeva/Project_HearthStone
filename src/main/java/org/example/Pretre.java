@@ -1,10 +1,12 @@
 package org.example;
 
+import java.util.ArrayList;
+
 public class Pretre extends Champion
 {
-    public Pretre(int id, String nom, int PV, int mana)
+    public Pretre(int id, String nom, int PV, int mana, ArrayList<Monstres> cartes)
     {
-        super(id, nom, PV, mana);
+        super(id, nom, PV, mana, cartes);
 
         // Implémentation spécifique pour le pretre
     }

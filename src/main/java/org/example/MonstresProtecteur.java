@@ -5,9 +5,5 @@ public class MonstresProtecteur extends Monstres {
         super(id, nom, pointsDeVie, forceAttaque);
     }
 
-    @Override
-    public void jouerTour() {
-        // Logique pour le tour de jeu du monstre protecteur
-        System.out.println("Monstre protecteur " + getNom() + " protège son champion !");
-    }
+
 }

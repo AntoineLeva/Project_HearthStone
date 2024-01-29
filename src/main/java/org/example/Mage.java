@@ -1,10 +1,12 @@
 package org.example;
 
+import java.util.ArrayList;
+
 public class Mage extends Champion
 {
-    public Mage(int id, String nom, int PV, int mana)
+    public Mage(int id, String nom, int PV, int mana, ArrayList<Monstres> cartes)
     {
-        super(id, nom, PV, mana);
+        super(id, nom, PV, mana, cartes);
 
         // Implémentation spécifique pour le pretre
     }
