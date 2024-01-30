@@ -24,13 +24,13 @@ public abstract class Champion implements ActionsChampion
     }
 
     @Override
-    public void attaquer(Champion cible)
+    public void attaquer(Champion cible, int degats)
     {
-        cible.PV = cible.PV - 30 ;
+        cible.PV = cible.PV - degats ;
     }
 
     @Override
-    public void poserCarte(ArrayList<Monstres> cartes)       //définir un test pour empecher de dépasser 5 pose de carte
+    public int poserCarte(ArrayList<Monstres> cartes)       //définir un test pour empecher de dépasser 5 pose de carte
     {
         int idCarte = tirageEntre1Et5();
 
@@ -39,7 +39,10 @@ public abstract class Champion implements ActionsChampion
             idCarte = tirageEntre1Et5();
         }
         monstreJoue.add(idCarte);
-        System.out.println(cartes.get(idCarte));
+
+
+        return idCarte;
+
 
 
 
@@ -61,9 +64,9 @@ public abstract class Champion implements ActionsChampion
     {
         Random random = new Random();
         int min = 1;
-        int max = 6;
+        int max = 5;
 
-        int nombreAleatoire = random.nextInt(max - min) + min;
+        int nombreAleatoire = random.nextInt(max - min) + 1;
 
         return nombreAleatoire;
     }

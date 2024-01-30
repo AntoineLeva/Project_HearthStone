@@ -2,6 +2,7 @@ package org.example;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.Random;
 
 public class Jeu
 {
@@ -10,6 +11,10 @@ public class Jeu
 
     Deck deckPretre = new Deck();
     Deck deckMage = new Deck();
+
+    ArrayList<Monstres> monstreJoueJ1 = new ArrayList<>();
+    ArrayList<Monstres> monstreJoueJ2 = new ArrayList<>();
+
 
 
 
@@ -94,7 +99,10 @@ public class Jeu
 
             if (champA.PV <= 0 || champB.PV <= 0 )
             {
-                System.out.println("Le champion a perdu. Fin du jeu.");
+                if(champA.PV <=0)
+                    System.out.println("Le champion " + champA.nom +" a perdu. Fin du jeu.");
+                System.out.println("Le champion " + champB.nom +" a perdu. Fin du jeu.");
+
                 // Fermer le scanner
                 scanner.close();
 
@@ -114,10 +122,47 @@ public class Jeu
 
         switch (choixJ1) {
             case 1:
-                champA.poserCarte(champA.cartes);
+                int idMonstre = champA.poserCarte(champA.cartes);
+                monstreJoueJ1.add(champA.cartes.get(idMonstre)); //ajout de la carte dans le deck
+
                 break;
             case 2:
-                champA.attaquer(champB);
+                int forceTotale = 0;
+                for(Monstres m :monstreJoueJ1)
+                {
+                   forceTotale = forceTotale + m.getForceAttaque();
+                }
+                if(monstreJoueJ2.isEmpty())
+                {
+                    champA.attaquer(champB, forceTotale);
+                    System.out.println("Les montres ont ingligés : " + forceTotale + " point de dégats au champion ennemi \n");
+
+                }
+                else
+                {
+                    int tailleMonstreJoue = monstreJoueJ2.size();
+
+                    //selection du monstre aleatoire qui va etre attaqué
+                    Random random = new Random();
+                    int min = 1;
+                    int max = tailleMonstreJoue -1;
+
+                    int monstreAttaquer = 0;// = random.nextInt(max - min) + min;
+                    if (max > min) {
+                        monstreAttaquer = random.nextInt(max - min + 1) + min;
+                    }
+
+                    monstreJoueJ2.get(monstreAttaquer).setPV(monstreJoueJ2.get(monstreAttaquer).getPV() - forceTotale);
+                    if (monstreJoueJ2.get(monstreAttaquer).getPV() <= 0)
+                        monstreJoueJ2.remove(monstreAttaquer);
+                }
+
+
+
+
+
+                System.out.println("Les montres ont ingligés : " + forceTotale + " point de dégats \n");
+
                 break;
             case 3:
                 champA.utiliserSpeciale();
@@ -143,11 +188,42 @@ public class Jeu
         switch (choixJ2)
         {
             case 1:
-                champB.poserCarte(champB.cartes);
+                int idMonstre = champB.poserCarte(champB.cartes);
+                monstreJoueJ2.add(champB.cartes.get(idMonstre)); //ajout de la carte dans le deck
                 break;
             case 2:
-                champB.attaquer(champA);
-                break;
+                int forceTotale = 0;
+                for(Monstres m :monstreJoueJ2)
+                {
+                    forceTotale = forceTotale + m.getForceAttaque();
+                }
+
+                if(monstreJoueJ1.isEmpty())
+                {
+                    champB.attaquer(champA, forceTotale);
+                    System.out.println("Les montres ont ingligés : " + forceTotale + " point de dégats au champion ennemi \n");
+                }
+
+                else
+                {
+                    int tailleMonstreJoue = monstreJoueJ1.size();
+
+                    //selection du monstre aleatoire qui va etre attaqué
+                    Random random = new Random();
+                    int min = 1;
+                    int max = tailleMonstreJoue -1;
+
+                    int monstreAttaquer = 0;// = random.nextInt(max - min) + min;
+                    if (max > min) {
+                        monstreAttaquer = random.nextInt(max - min + 1) + min;
+                    }
+
+                    monstreJoueJ1.get(monstreAttaquer).setPV(monstreJoueJ1.get(monstreAttaquer).getPV() - forceTotale);
+                    if (monstreJoueJ1.get(monstreAttaquer).getPV() <= 0)
+                        monstreJoueJ1.remove(monstreAttaquer);
+                }
+                System.out.println("Les montres ont ingligés : " + forceTotale + " point de dégats \n");
+
             case 3:
                 champB.utiliserSpeciale();
                 break;
@@ -177,6 +253,7 @@ public class Jeu
 
         System.out.println(champA); //etat des champions
         System.out.println(champB);
+        System.out.println("\n Monstre en jeu : "+ monstreJoueJ1); //etat des monstres posé
 
         System.out.print("Choisissez une action : ");
     }
@@ -191,6 +268,7 @@ public class Jeu
 
         System.out.println(champA); //etats des champions
         System.out.println(champB);
+        System.out.println("\n Monstres en jeu : "+ monstreJoueJ2);
 
         System.out.print("Choisissez une action : ");
     }
