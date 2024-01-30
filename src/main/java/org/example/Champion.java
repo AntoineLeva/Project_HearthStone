@@ -23,6 +23,54 @@ public abstract class Champion implements ActionsChampion
         this.cartes = cartes;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getNom() {
+        return nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public int getPV() {
+        return PV;
+    }
+
+    public void setPV(int PV) {
+        this.PV = PV;
+    }
+
+    public ArrayList<Monstres> getCartes() {
+        return cartes;
+    }
+
+    public void setCartes(ArrayList<Monstres> cartes) {
+        this.cartes = cartes;
+    }
+
+    public ArrayList<Integer> getMonstreJoue() {
+        return monstreJoue;
+    }
+
+    public void setMonstreJoue(ArrayList<Integer> monstreJoue) {
+        this.monstreJoue = monstreJoue;
+    }
+
+    public int getMana() {
+        return mana;
+    }
+
+    public void setMana(int mana) {
+        this.mana = mana;
+    }
+
     @Override
     public void attaquer(Champion cible, int degats)
     {

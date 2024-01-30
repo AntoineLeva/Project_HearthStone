@@ -1,6 +1,6 @@
 package org.example;
 
-public abstract class Monstres {
+public class Monstres {
     private int id;
     private String nom;
     private int PV;
